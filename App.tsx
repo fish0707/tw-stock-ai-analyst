@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppSettings, Tab } from './types';
 import Settings from './components/Settings';
 import AnalysisView from './components/AnalysisView';
@@ -6,12 +6,9 @@ import Dashboard from './components/Dashboard';
 import GasGenerator from './components/GasGenerator';
 import MonsterStockFinder from './components/MonsterStockFinder';
 
-const ENV_GEMINI_KEY: string = (import.meta as any).env?.VITE_GEMINI_API_KEY ?? '';
-const ENV_FUGLE_KEY: string = (import.meta as any).env?.VITE_FUGLE_API_KEY ?? '';
-
 const DEFAULT_SETTINGS: AppSettings = {
-  geminiKey: ENV_GEMINI_KEY,
-  fugleKey: ENV_FUGLE_KEY,
+  geminiKey: (import.meta as any).env?.VITE_GEMINI_API_KEY ?? '',
+  fugleKey: (import.meta as any).env?.VITE_FUGLE_API_KEY ?? '',
   lineChannelToken: '',
   lineUserId: '',
   sheetId: '',
@@ -49,7 +46,7 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <span className="text-2xl">??</span>
+              <span className="text-2xl">📈</span>
               <span className="font-bold text-xl tracking-tight text-white hidden md:block">TW Stock <span className="text-twRed">AI</span> Analyst</span>
               <span className="font-bold text-xl tracking-tight text-white md:hidden">TW <span className="text-twRed">AI</span></span>
             </div>
@@ -61,14 +58,15 @@ const App: React.FC = () => {
                   activeTab === Tab.DASHBOARD ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 }`}
               >
-                ????              </button>
+                監控台
+              </button>
               <button
                 onClick={() => setActiveTab(Tab.ANALYSIS)}
                 className={`px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
                   activeTab === Tab.ANALYSIS ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 }`}
               >
-                ???
+                個股分析
               </button>
               <button
                 onClick={() => setActiveTab(Tab.MONSTER_STOCK)}
@@ -78,7 +76,7 @@ const App: React.FC = () => {
                     : 'text-pink-400 hover:bg-gray-700 hover:text-pink-300'
                 }`}
               >
-                ? 鞈剖?璈(憒)
+                🎰 賭博機器(妖股)
               </button>
               <button
                 onClick={() => setActiveTab(Tab.AUTOMATION)}
@@ -86,7 +84,7 @@ const App: React.FC = () => {
                   activeTab === Tab.AUTOMATION ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 }`}
               >
-                ?芸???(GAS)
+                自動化 (GAS)
               </button>
               <button
                 onClick={() => setActiveTab(Tab.SETTINGS)}
@@ -94,7 +92,7 @@ const App: React.FC = () => {
                   activeTab === Tab.SETTINGS ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                 }`}
               >
-                閮剖?
+                設定
               </button>
             </div>
           </div>
@@ -105,8 +103,8 @@ const App: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!settings.geminiKey && activeTab !== Tab.SETTINGS && (
            <div className="bg-yellow-900/50 border-l-4 border-yellow-500 text-yellow-200 p-4 mb-6" role="alert">
-              <p className="font-bold">閮剖??芸???/p>
-              <p>隢?敺?身摰??Ｚ撓?交??Gemini API Key 隞亙??典????賬?/p>
+              <p className="font-bold">設定未完成</p>
+              <p>請前往「設定」頁面輸入您的 Gemini API Key 以啟用分析功能。</p>
            </div>
         )}
 
