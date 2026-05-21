@@ -6,13 +6,13 @@ import Dashboard from './components/Dashboard';
 import GasGenerator from './components/GasGenerator';
 import MonsterStockFinder from './components/MonsterStockFinder';
 
-// 硬寫入預設設定，方便用戶直接使用
+// 預設設定（請至設定頁面填入您的 API Key）
 const DEFAULT_SETTINGS: AppSettings = {
-  geminiKey: 'AIzaSyDnRNPAF1NYTsPhuK66m-u8VJvpp1-1SCc',
-  fugleKey: '5edf261f-0fe6-4e38-8676-f394993b587d',
-  lineChannelToken: '7OUpjRKGvjHtKeLpGJatBhXZY2RQzyPztivyy8gQtX6/79idHHbXw14K0m51EudtbOlb7uKAvcjqb5DYDoYhrJXe2VDkSwreZCx3Y7GWRisBUXKhglZdGeGZ9u2FDv4LTF7HgCR4gKt6yFINiVdnXwdB04t89/1O/w1cDnyilFU=',
-  lineUserId: 'U68a76601a0baf4685e2a58495e8d033f',
-  sheetId: '1-cjfClpnewb_LesdMWA0-weJT3ssYqWtcazLdH9OFDU',
+  geminiKey: '',
+  fugleKey: '',
+  lineChannelToken: '',
+  lineUserId: '',
+  sheetId: '',
 };
 
 const App: React.FC = () => {
