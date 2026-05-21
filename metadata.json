@@ -1,0 +1,5 @@
+{
+  "name": "TW Stock AI Analyst",
+  "description": "A professional AI-powered Taiwan stock analysis dashboard featuring technical analysis, price forecasting, and automated entry-point monitoring with LINE notifications.",
+  "requestFramePermissions": []
+}

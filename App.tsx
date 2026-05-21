@@ -1,0 +1,122 @@
+import React, { useState, useEffect } from 'react';
+import { AppSettings, Tab } from './types';
+import Settings from './components/Settings';
+import AnalysisView from './components/AnalysisView';
+import Dashboard from './components/Dashboard';
+import GasGenerator from './components/GasGenerator';
+import MonsterStockFinder from './components/MonsterStockFinder';
+
+// 硬寫入預設設定，方便用戶直接使用
+const DEFAULT_SETTINGS: AppSettings = {
+  geminiKey: 'AIzaSyDnRNPAF1NYTsPhuK66m-u8VJvpp1-1SCc',
+  fugleKey: '5edf261f-0fe6-4e38-8676-f394993b587d',
+  lineChannelToken: '7OUpjRKGvjHtKeLpGJatBhXZY2RQzyPztivyy8gQtX6/79idHHbXw14K0m51EudtbOlb7uKAvcjqb5DYDoYhrJXe2VDkSwreZCx3Y7GWRisBUXKhglZdGeGZ9u2FDv4LTF7HgCR4gKt6yFINiVdnXwdB04t89/1O/w1cDnyilFU=',
+  lineUserId: 'U68a76601a0baf4685e2a58495e8d033f',
+  sheetId: '1-cjfClpnewb_LesdMWA0-weJT3ssYqWtcazLdH9OFDU',
+};
+
+const App: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.DASHBOARD);
+  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
+
+  // Load settings from localStorage on mount, but prioritize defaults if keys are missing
+  useEffect(() => {
+    const saved = localStorage.getItem('twStockAppSettings');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setSettings({
+        geminiKey: parsed.geminiKey || DEFAULT_SETTINGS.geminiKey,
+        fugleKey: parsed.fugleKey || DEFAULT_SETTINGS.fugleKey,
+        lineChannelToken: parsed.lineChannelToken || parsed.lineToken || DEFAULT_SETTINGS.lineChannelToken,
+        lineUserId: parsed.lineUserId || DEFAULT_SETTINGS.lineUserId,
+        sheetId: parsed.sheetId || DEFAULT_SETTINGS.sheetId,
+      });
+    }
+  }, []);
+
+  const handleSaveSettings = (newSettings: AppSettings) => {
+    setSettings(newSettings);
+    localStorage.setItem('twStockAppSettings', JSON.stringify(newSettings));
+    // Do not auto switch tab
+  };
+
+  return (
+    <div className="min-h-screen bg-darkBg text-gray-100 font-sans pb-10">
+      {/* Navigation Bar */}
+      <nav className="sticky top-0 z-50 bg-cardBg/90 backdrop-blur-md border-b border-gray-700 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">📈</span>
+              <span className="font-bold text-xl tracking-tight text-white hidden md:block">TW Stock <span className="text-twRed">AI</span> Analyst</span>
+              <span className="font-bold text-xl tracking-tight text-white md:hidden">TW <span className="text-twRed">AI</span></span>
+            </div>
+            
+            <div className="flex space-x-2 overflow-x-auto no-scrollbar">
+              <button
+                onClick={() => setActiveTab(Tab.DASHBOARD)}
+                className={`px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
+                  activeTab === Tab.DASHBOARD ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                監控台
+              </button>
+              <button
+                onClick={() => setActiveTab(Tab.ANALYSIS)}
+                className={`px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
+                  activeTab === Tab.ANALYSIS ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                個股分析
+              </button>
+              <button
+                onClick={() => setActiveTab(Tab.MONSTER_STOCK)}
+                className={`px-3 py-2 rounded-md text-sm font-bold whitespace-nowrap transition-colors ${
+                  activeTab === Tab.MONSTER_STOCK 
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg' 
+                    : 'text-pink-400 hover:bg-gray-700 hover:text-pink-300'
+                }`}
+              >
+                🎰 賭博機器(妖股)
+              </button>
+              <button
+                onClick={() => setActiveTab(Tab.AUTOMATION)}
+                className={`px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
+                  activeTab === Tab.AUTOMATION ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                自動化 (GAS)
+              </button>
+              <button
+                onClick={() => setActiveTab(Tab.SETTINGS)}
+                className={`px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${
+                  activeTab === Tab.SETTINGS ? 'bg-gray-700 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                設定
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {!settings.geminiKey && activeTab !== Tab.SETTINGS && (
+           <div className="bg-yellow-900/50 border-l-4 border-yellow-500 text-yellow-200 p-4 mb-6" role="alert">
+              <p className="font-bold">設定未完成</p>
+              <p>請前往「設定」頁面輸入您的 Gemini API Key 以啟用分析功能。</p>
+           </div>
+        )}
+
+        {activeTab === Tab.DASHBOARD && <Dashboard settings={settings} />}
+        {activeTab === Tab.ANALYSIS && <AnalysisView apiKey={settings.geminiKey} fugleKey={settings.fugleKey} />}
+        {activeTab === Tab.MONSTER_STOCK && <MonsterStockFinder settings={settings} />}
+        {activeTab === Tab.AUTOMATION && <GasGenerator settings={settings} />}
+        {activeTab === Tab.SETTINGS && <Settings settings={settings} onSave={handleSaveSettings} />}
+      </main>
+    </div>
+  );
+};
+
+export default App;
