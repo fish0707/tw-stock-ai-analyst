@@ -7,8 +7,8 @@ import GasGenerator from './components/GasGenerator';
 import MonsterStockFinder from './components/MonsterStockFinder';
 
 // ?êË®≠Ë®≠Â?ÔºàË??≥Ë®≠ÂÆöÈ??¢Â°´?•ÊÇ®??API KeyÔº?const DEFAULT_SETTINGS: AppSettings = {
-  geminiKey: import.meta.env.VITE_GEMINI_API_KEY || '',
-  fugleKey: import.meta.env.VITE_FUGLE_API_KEY || '',
+  geminiKey: (import.meta as any).env.VITE_GEMINI_API_KEY || '',
+  fugleKey: (import.meta as any).env.VITE_FUGLE_API_KEY || '',
   lineChannelToken: '',
   lineUserId: '',
   sheetId: '',
